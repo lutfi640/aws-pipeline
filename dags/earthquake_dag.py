@@ -11,9 +11,6 @@ default_args = {
     'retry_delay': timedelta(minutes=2),
 }
 
-today_str = datetime.now().strftime('%Y-%m-%d')
-s3_key_bronze = f"BRONZE/earthquake_data_{today_str}.json"
-
 with DAG(
     'earthquake_pipeline_v2',
     default_args=default_args,
@@ -41,6 +38,9 @@ with DAG(
         # Cadangan kalau filenya belum ke-copy ke EC2 agar DAG gak rusak/broken
         script_code_string = f"print('Gagal membaca file script lokal: {str(e)}')"
         raise e
+
+    today_str = datetime.now().strftime('%Y-%m-%d')
+    s3_key_bronze = f"BRONZE/earthquake/stg_earthquake/earthquake_data_{today_str}.json"
 
     generate_dim = LambdaInvokeOperator(
         task_id='generate_dim_earthquake',
