@@ -4,7 +4,7 @@ import pandas as pd
 import io
 import uuid
 from datetime import datetime
-import great_expectations as ge
+import great_expectations as gx
 
 # ==========================================
 # 1. FUNGSI UTILS (OPERASI S3)
@@ -44,7 +44,7 @@ def save_log_to_s3(bucket, prefix, df):
 # ==========================================
 def validate_bronze_ingestion(df, dq_logs_list):
     print("Mulai validasi Bronze Data Quality...")
-    ge_df = ge.from_pandas(df)
+    ge_df = gx.from_pandas(df)
 
     # Definisikan rules
     checks = [
@@ -70,7 +70,7 @@ def validate_bronze_ingestion(df, dq_logs_list):
 
 def validate_silver_governance(df, dq_logs_list):
     print("Mulai validasi Silver Data Governance...")
-    ge_df = ge.from_pandas(df)
+    ge_df = gx.from_pandas(df)
 
     checks = [
         ("No Nulls in place_id", ge_df.expect_column_values_to_not_be_null("place_id")),
