@@ -76,7 +76,7 @@ print("Menerima event dinamis dari Airflow:", event)
 
 bucket_name = event.get('bucket', 'learn-aws-imam')
 date_str = datetime.now().strftime('%Y-%m-%d')
-default_key = f"bronze/earthquake_data_{date_str}.json"
+default_key = f"BRONZE/earthquake_data_{date_str}.json"
 file_key = event.get('key', default_key)
 
 try:
