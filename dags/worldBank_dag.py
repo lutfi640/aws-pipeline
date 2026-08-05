@@ -24,7 +24,7 @@ with DAG(
     extract_task = BashOperator(
         task_id='extract_wb_api_to_bronze',
         # Pastikan file python ini udah ada di dalam folder EC2/Docker lo
-        bash_command='python /opt/airflow/scripts/extractors/extract_world_bank.py',
+        bash_command='python /opt/airflow/scripts/extractors/extract_worldBank.py',
     )
 
     # Pipeline Flow (Cuma 1 task aja)
