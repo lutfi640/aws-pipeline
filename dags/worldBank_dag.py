@@ -34,7 +34,7 @@ with DAG(
     # TASK 2: GENERATE DIMENSIONS (dim_country & dim_indicator)
     # =============================================================
     try:
-        with open('/opt/airflow/lambda/transformers/dim_world_bank.py', 'r') as file:
+        with open('/opt/airflow/lambda/transformers/dim_worldBank.py', 'r') as file:
             dim_code_string = file.read()
     except Exception as e:
         dim_code_string = f"print('Gagal membaca file script lokal: {str(e)}')"
