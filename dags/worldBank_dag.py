@@ -27,7 +27,7 @@ with DAG(
     # =============================================================
     extract_task = BashOperator(
         task_id='extract_wb_api_to_bronze',
-        bash_command='python /opt/airflow/scripts/extractors/extract_world_bank.py',
+        bash_command='python /opt/airflow/scripts/extractors/extract_worldBank.py',
     )
 
     # =============================================================
