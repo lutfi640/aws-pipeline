@@ -75,6 +75,28 @@ with DAG(
     )
 
     # =============================================================
+    # TASK 3: TRANSFORM SILVER FACT (fact_indicator Parquet)
+    # =============================================================
+    try:
+        with open('/opt/airflow/lambda/transformers/gold_worldBank.py', 'r') as file:
+            dim_code_string = file.read()
+    except Exception as e:
+        dim_code_string = f"print('Gagal membaca file script lokal: {str(e)}')"
+        raise e
+
+    transform_gold = LambdaInvokeOperator(
+        task_id='transform_silver_to_gold',
+        function_name='earthquake-transformer-docker', # Container Lambda Docker yang sama
+        payload=json.dumps({
+            "code": dim_code_string, 
+            "bucket": "learn-aws-imam", 
+            "date": today_str
+        }),
+        aws_conn_id='aws_default',
+        log_type='Tail'
+    )
+
+    # =============================================================
     # PIPELINE DEPENDENCY FLOW
     # =============================================================
-    extract_task >> generate_dim >> transform_fact
+    extract_task >> generate_dim >> transform_fact >> transform_gold
