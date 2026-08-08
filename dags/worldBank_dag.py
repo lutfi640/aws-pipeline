@@ -55,26 +55,26 @@ with DAG(
     # =============================================================
     # TASK 3: TRANSFORM SILVER FACT (fact_indicator Parquet)
     # =============================================================
-    # try:
-    #     with open('/opt/airflow/lambda/transformers/transform_world_bank.py', 'r') as file:
-    #         transform_code_string = file.read()
-    # except Exception as e:
-    #     transform_code_string = f"print('Gagal membaca file script lokal: {str(e)}')"
-    #     raise e
+    try:
+        with open('/opt/airflow/lambda/transformers/transform_worldBank.py', 'r') as file:
+            dim_code_string = file.read()
+    except Exception as e:
+        dim_code_string = f"print('Gagal membaca file script lokal: {str(e)}')"
+        raise e
 
-    # transform_fact = LambdaInvokeOperator(
-    #     task_id='transform_wb_bronze_to_silver',
-    #     function_name='earthquake-transformer-docker',
-    #     payload=json.dumps({
-    #         "code": transform_code_string, 
-    #         "bucket": "learn-aws-imam", 
-    #         "date": today_str
-    #     }),
-    #     aws_conn_id='aws_default',
-    #     log_type='Tail'
-    # )
+    transform_fact = LambdaInvokeOperator(
+        task_id='transform_bronze_to_silver_fact',
+        function_name='earthquake-transformer-docker', # Container Lambda Docker yang sama
+        payload=json.dumps({
+            "code": dim_code_string, 
+            "bucket": "learn-aws-imam", 
+            "date": today_str
+        }),
+        aws_conn_id='aws_default',
+        log_type='Tail'
+    )
 
     # =============================================================
     # PIPELINE DEPENDENCY FLOW
     # =============================================================
-    extract_task >> generate_dim #>> transform_fact
+    extract_task >> generate_dim >> transform_fact
